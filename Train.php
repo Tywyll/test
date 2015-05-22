@@ -12,24 +12,40 @@ class Train {
 		$this->registrationNumber = $registrationNumber;
 	}
 
-	function startTrip($dateAndTime) {
+	public function startTrip($dateAndTime) {
 		$this->justLeft = $this->enRouteStations[0];
 		$this->willArriveTo = $this->enRouteStations[1];
 
 		//setDateAndTimeInDatabase
 	}
 
-	function finishTrip($dateAndTime) {
+	public function finishTrip($dateAndTime) {
 		//setDateAndTimeInDatabase
 	}
 
 	function setPassedNextStation() {
-		$this->justLeft = $this->willArriveTo;
-		$this->willArriveTo = $this->enRouteStations[
-			(array_search($this->justLeft, $this->enRouteStations) + 1)
-			];
-	}
 
+		$this->willArriveTo = next($this->enRouteStations);
+		$this->justLeft = $this->willArriveTo;
+	}
+	
+	public function addStation($name, $beforeName) {
+		$cur=current($this->enRouteStations);
+		$tmp=array_keys($this->enRouteStations,$beforeName);
+		array_splice($this->enRouteStations, ($tmp[0]+1), 0, $name);
+		unset($tmp);
+		while (current($this->enRouteStations)!=$cur) next($this->enRouteStations);
+	}
+	
+	function getFirstStaion() {
+		return $this->enRouteStations[0];
+	}
+	function getNextStation() {
+		return $this->willArriveTo;
+	}
+	function getLastStation() {
+		return end($this->enRouteStations);
+	}
 }
 
 ?>
